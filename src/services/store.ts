@@ -9,3 +9,19 @@ export const addUser = (user: User): void => {
     throw new Error('Error while adding new user');
   }
 };
+
+export const getAllUsers = (): User[] => {
+  try {
+    return users;
+  } catch (error) {
+    throw new Error('Error while getting all users');
+  }
+};
+
+export const getUser = (id: string): User | undefined => {
+  try {
+    return users.find((user) => user.id === id);
+  } catch (error) {
+    throw new Error('Error while getting user by id');
+  }
+};

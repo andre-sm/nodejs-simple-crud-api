@@ -1,11 +1,23 @@
 import { IncomingMessage, ServerResponse } from 'http';
-import { addUser } from '../controllers/user-controller';
+import { addUser, getAllUsers, getUser } from '../controllers/user-controller';
 
 const handleRequests = (req: IncomingMessage, res: ServerResponse): void => {
   try {
     const { url, method } = req;
+    const urlParts = url?.split('/').filter(Boolean) as string[];
+    const userId = urlParts[2];
 
     switch (method) {
+      case 'GET':
+        if (url === '/api/users') {
+          getAllUsers(req, res);
+        }
+
+        if (urlParts[0] === 'api' && urlParts[1] === 'users' && userId) {
+          getUser(req, res, urlParts[2]);
+        }
+        break;
+
       case 'POST':
         if (url === '/api/users') {
           addUser(req, res);

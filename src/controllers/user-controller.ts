@@ -1,8 +1,43 @@
 import { IncomingMessage, ServerResponse } from 'http';
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4, validate as uuidValidate } from 'uuid';
 import { User } from '../models/user-models';
 import * as store from '../services/store';
 import * as utils from '../utils/index';
+
+export const getAllUsers = (req: IncomingMessage, res: ServerResponse): void => {
+  try {
+    const users = store.getAllUsers();
+
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(users));
+  } catch (error) {
+    res.writeHead(500, { 'Content-Type': 'application/json' });
+    res.end('Internal server error');
+  }
+};
+
+export const getUser = (req: IncomingMessage, res: ServerResponse, userId: string): void => {
+  try {
+    const isValidId = uuidValidate(userId);
+
+    if (!isValidId) {
+      res.writeHead(400, { 'Content-Type': 'application/json' });
+      res.end('User Id is invalid');
+    } else {
+      const user = store.getUser(userId);
+      if (user) {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(user));
+      } else {
+        res.writeHead(404, { 'Content-Type': 'application/json' });
+        res.end('User doesn\'t exist');
+      }
+    }
+  } catch (error) {
+    res.writeHead(500, { 'Content-Type': 'application/json' });
+    res.end('Internal server error');
+  }
+};
 
 export const addUser = async (req: IncomingMessage, res: ServerResponse): Promise<void> => {
   try {
