@@ -1,6 +1,6 @@
 import { IncomingMessage, ServerResponse } from 'http';
 import {
-  addUser, getAllUsers, getUser, editUser,
+  addUser, getAllUsers, getUser, editUser, deleteUser,
 } from '../controllers/user-controller';
 
 const handleRequests = (req: IncomingMessage, res: ServerResponse): void => {
@@ -29,6 +29,12 @@ const handleRequests = (req: IncomingMessage, res: ServerResponse): void => {
       case 'PUT':
         if (urlParts[0] === 'api' && urlParts[1] === 'users' && userId) {
           editUser(req, res, userId);
+        }
+        break;
+
+      case 'DELETE':
+        if (urlParts[0] === 'api' && urlParts[1] === 'users' && userId) {
+          deleteUser(req, res, userId);
         }
         break;
 

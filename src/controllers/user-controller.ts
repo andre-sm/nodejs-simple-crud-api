@@ -102,3 +102,27 @@ export const editUser = async (req: IncomingMessage, res: ServerResponse, userId
     res.end('Internal server error');
   }
 };
+
+export const deleteUser = (req: IncomingMessage, res: ServerResponse, userId: string): void => {
+  try {
+    const isValidId = uuidValidate(userId);
+
+    if (!isValidId) {
+      res.writeHead(400, { 'Content-Type': 'application/json' });
+      res.end('User Id is invalid');
+    } else {
+      const isdeleted = store.deleteUser(userId);
+
+      if (isdeleted) {
+        res.writeHead(204, { 'Content-Type': 'application/json' });
+        res.end();
+      } else {
+        res.writeHead(404, { 'Content-Type': 'application/json' });
+        res.end('User doesn\'t exist');
+      }
+    }
+  } catch (error) {
+    res.writeHead(500, { 'Content-Type': 'application/json' });
+    res.end('Internal server error');
+  }
+};

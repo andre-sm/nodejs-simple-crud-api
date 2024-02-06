@@ -39,3 +39,17 @@ export const updateUser = (newData: User): User | null => {
     throw new Error('Error while updating user');
   }
 };
+
+export const deleteUser = (userId: string): boolean | null => {
+  try {
+    const userIndex = users.findIndex((user) => user.id === userId);
+
+    if (userIndex !== -1) {
+      users.splice(userIndex, 1);
+      return true;
+    }
+    return null;
+  } catch (error) {
+    throw new Error('Error while deleting user');
+  }
+};
