@@ -65,3 +65,40 @@ export const addUser = async (req: IncomingMessage, res: ServerResponse): Promis
     res.end('Internal server error');
   }
 };
+
+export const editUser = async (req: IncomingMessage, res: ServerResponse, userId: string): Promise<void> => {
+  try {
+    const isValidId = uuidValidate(userId);
+
+    if (!isValidId) {
+      res.writeHead(400, { 'Content-Type': 'application/json' });
+      res.end('User Id is invalid');
+    } else {
+      const parsedBody = await utils.readRequestBody(req);
+      const { username, age, hobbies } = parsedBody;
+
+      const { isValid, message } = utils.validateRequiredFields(username, age, hobbies);
+
+      if (!isValid) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(message));
+      } else {
+        const userData: User = {
+          id: userId, username, age, hobbies,
+        };
+        const updatedUser = store.updateUser(userData);
+
+        if (updatedUser) {
+          res.writeHead(200, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify(updatedUser));
+        } else {
+          res.writeHead(404, { 'Content-Type': 'application/json' });
+          res.end('User doesn\'t exist');
+        }
+      }
+    }
+  } catch (error) {
+    res.writeHead(500, { 'Content-Type': 'application/json' });
+    res.end('Internal server error');
+  }
+};

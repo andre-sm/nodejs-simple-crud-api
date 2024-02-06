@@ -9,7 +9,8 @@ export const validateRequiredFields = (username: string, age: number, hobbies: s
       messages.push('User age is required');
     }
 
-    const isEveryIsString = Array.isArray(hobbies) && hobbies.every((hobby) => typeof hobby === 'string' && hobby !== '');
+    const isEveryIsString = Array.isArray(hobbies)
+    && hobbies.every((hobby) => typeof hobby === 'string' && hobby !== '');
 
     if (!Array.isArray(hobbies) || (Array.isArray(hobbies) && !isEveryIsString)) {
       messages.push('User hobbies are required');

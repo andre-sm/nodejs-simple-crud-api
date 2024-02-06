@@ -1,5 +1,7 @@
 import { IncomingMessage, ServerResponse } from 'http';
-import { addUser, getAllUsers, getUser } from '../controllers/user-controller';
+import {
+  addUser, getAllUsers, getUser, editUser,
+} from '../controllers/user-controller';
 
 const handleRequests = (req: IncomingMessage, res: ServerResponse): void => {
   try {
@@ -21,6 +23,12 @@ const handleRequests = (req: IncomingMessage, res: ServerResponse): void => {
       case 'POST':
         if (url === '/api/users') {
           addUser(req, res);
+        }
+        break;
+
+      case 'PUT':
+        if (urlParts[0] === 'api' && urlParts[1] === 'users' && userId) {
+          editUser(req, res, userId);
         }
         break;
 
