@@ -1,4 +1,4 @@
-export interface UserRequestBody {
+export interface UserReqBody {
   username: string;
   age: number;
   hobbies: string[];
