@@ -4,7 +4,7 @@ import { User } from '../models/user-models';
 import * as store from '../services/store';
 import * as utils from '../utils/index';
 
-export const getAllUsers = (req: IncomingMessage, res: ServerResponse): void => {
+const getAllUsers = (req: IncomingMessage, res: ServerResponse): void => {
   try {
     const users = store.getAllUsers();
 
@@ -16,7 +16,7 @@ export const getAllUsers = (req: IncomingMessage, res: ServerResponse): void => 
   }
 };
 
-export const getUser = (req: IncomingMessage, res: ServerResponse, userId: string): void => {
+const getUser = (req: IncomingMessage, res: ServerResponse, userId: string): void => {
   try {
     const isValidId = uuidValidate(userId);
 
@@ -39,7 +39,7 @@ export const getUser = (req: IncomingMessage, res: ServerResponse, userId: strin
   }
 };
 
-export const addUser = async (req: IncomingMessage, res: ServerResponse): Promise<void> => {
+const addUser = async (req: IncomingMessage, res: ServerResponse): Promise<void> => {
   try {
     const parsedBody = await utils.readRequestBody(req);
 
@@ -66,9 +66,9 @@ export const addUser = async (req: IncomingMessage, res: ServerResponse): Promis
   }
 };
 
-export const editUser = async (req: IncomingMessage, res: ServerResponse, userId: string): Promise<void> => {
+const editUser = async (req: IncomingMessage, res: ServerResponse, id: string): Promise<void> => {
   try {
-    const isValidId = uuidValidate(userId);
+    const isValidId = uuidValidate(id);
 
     if (!isValidId) {
       res.writeHead(400, { 'Content-Type': 'application/json' });
@@ -84,7 +84,7 @@ export const editUser = async (req: IncomingMessage, res: ServerResponse, userId
         res.end(JSON.stringify(message));
       } else {
         const userData: User = {
-          id: userId, username, age, hobbies,
+          id, username, age, hobbies,
         };
         const updatedUser = store.updateUser(userData);
 
@@ -103,7 +103,7 @@ export const editUser = async (req: IncomingMessage, res: ServerResponse, userId
   }
 };
 
-export const deleteUser = (req: IncomingMessage, res: ServerResponse, userId: string): void => {
+const deleteUser = (req: IncomingMessage, res: ServerResponse, userId: string): void => {
   try {
     const isValidId = uuidValidate(userId);
 
@@ -125,4 +125,12 @@ export const deleteUser = (req: IncomingMessage, res: ServerResponse, userId: st
     res.writeHead(500, { 'Content-Type': 'application/json' });
     res.end('Internal server error');
   }
+};
+
+export {
+  getAllUsers,
+  getUser,
+  addUser,
+  editUser,
+  deleteUser,
 };
