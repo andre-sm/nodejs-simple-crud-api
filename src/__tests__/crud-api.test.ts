@@ -22,7 +22,7 @@ describe('CRUD operations API tests', () => {
   });
 
   test('POST request should return new user record and 201 status code', async () => {
-    const response = await request(server).post(endpoint).send(userData);
+    const response = await request(server).post(endpoint).send(userData).set('Content-Type', 'application/json');
     expect(response.statusCode).toBe(201);
 
     const { id, ...userDataWithoutId } = response.body;
@@ -37,7 +37,10 @@ describe('CRUD operations API tests', () => {
   });
 
   test('PUT request should return updated user data and 200 status code', async () => {
-    const response = await request(server).put(`${endpoint}/${userId}`).send({ ...userData, age: 33 });
+    const response = await request(server)
+      .put(`${endpoint}/${userId}`)
+      .send({ ...userData, age: 33 })
+      .set('Content-Type', 'application/json');
     expect(response.statusCode).toBe(200);
     expect(response.body).toEqual({ ...userData, id: userId, age: 33 });
   });
@@ -47,8 +50,9 @@ describe('CRUD operations API tests', () => {
     expect(response.statusCode).toBe(204);
   });
 
-  test('GET request should return 404 status code if user doesn\'t exist', async () => {
+  test("GET request should return 404 status code if user doesn't exist", async () => {
     const response = await request(server).get(`${endpoint}/${userId}`);
     expect(response.statusCode).toBe(404);
+    expect(response.body).toBe("User doesn't exist");
   });
 });

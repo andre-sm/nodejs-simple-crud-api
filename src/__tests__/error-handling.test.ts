@@ -17,15 +17,13 @@ describe('Correct error handling tests', () => {
   });
 
   test("should return error message if provided endpoint doesn't match with existing. Case 1", async () => {
-    const response = await request(server).get('/api/user').set('Content-Type', 'application/json');
+    const response = await request(server).get('/api/user');
     expect(response.statusCode).toBe(404);
     expect(response.body).toBe("Endpoint doesn't exist");
   });
 
   test("should return error message if provided endpoint doesn't match with existing. Case 2", async () => {
-    const response = await request(server)
-      .get('/api/users/current-user/account')
-      .set('Content-Type', 'application/json');
+    const response = await request(server).get('/api/users/current-user/account');
     expect(response.statusCode).toBe(404);
     expect(response.body).toBe("Endpoint doesn't exist");
   });
@@ -40,9 +38,7 @@ describe('Correct error handling tests', () => {
   });
 
   test('should return error message if uuid is invalid and 400 status code', async () => {
-    const response = await request(server)
-      .get(`${endpoint}/${userId.slice(0, -1)}123`)
-      .set('Content-Type', 'application/json');
+    const response = await request(server).get(`${endpoint}/${userId.slice(0, -1)}123`);
     expect(response.statusCode).toBe(400);
     expect(response.body).toBe('User Id is invalid');
   });
@@ -56,15 +52,20 @@ describe('Correct error handling tests', () => {
     expect(response.body).toBe('Internal server error');
   });
 
-  test('PUT request should return 404 status code if user doesn\'t exist', async () => {
-    const response = await request(server).put(`${endpoint}/${userId.slice(0, -1)}3`).send(userData).set('Content-Type', 'application/json');
+  test("PUT request should return 404 status code if user doesn't exist", async () => {
+    const response = await request(server)
+      .put(`${endpoint}/${userId.slice(0, -1)}3`)
+      .send(userData)
+      .set('Content-Type', 'application/json');
     expect(response.statusCode).toBe(404);
-    expect(response.body).toBe('User doesn\'t exist');
+    expect(response.body).toBe("User doesn't exist");
   });
 
-  test('DELETE request should return 404 status code if user doesn\'t exist', async () => {
-    const response = await request(server).delete(`${endpoint}/${userId.slice(0, -1)}3`).send(userData).set('Content-Type', 'application/json');
+  test("DELETE request should return 404 status code if user doesn't exist", async () => {
+    const response = await request(server)
+      .delete(`${endpoint}/${userId.slice(0, -1)}3`)
+      .send(userData);
     expect(response.statusCode).toBe(404);
-    expect(response.body).toBe('User doesn\'t exist');
+    expect(response.body).toBe("User doesn't exist");
   });
 });
