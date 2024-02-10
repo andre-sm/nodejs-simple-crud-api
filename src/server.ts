@@ -7,6 +7,8 @@ const port = process.env.PORT || 4000;
 
 const server = http.createServer();
 server.on('request', (req, res) => handleRequests(req, res));
-server.listen(port);
+server.listen(port, () => {
+  console.log(`Server listening on port ${port}`);
+});
 
 export default server;
