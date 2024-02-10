@@ -23,7 +23,7 @@ export const validateRequiredFields = (username: string, age: number, hobbies: s
     } else if (!Array.isArray(hobbies)) {
       messages.push('User hobbies must be an array');
     } else if (!isEveryIsString) {
-      messages.push('User hobbies must contain non-empty strings');
+      messages.push('User hobbies must contain non-empty strings only');
     }
 
     const validationResult: { isValid: boolean; message: string } = { isValid: true, message: '' };
