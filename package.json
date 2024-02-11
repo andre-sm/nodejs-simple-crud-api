@@ -2,10 +2,11 @@
   "name": "nodejs-simple-crud-api",
   "version": "1.0.0",
   "description": "",
-  "main": "server.ts",
+  "main": "index.ts",
   "scripts": {
-    "start:dev": "tsc && ts-node-dev src/server.ts",
-    "start:prod": "tsc && node dist/server.js",
+    "start:dev": "tsc && ts-node-dev src/index.ts",
+    "start:prod": "tsc && node dist/index.js",
+    "start:multi": "tsc && ts-node-dev src/index.ts --multi",
     "test": "jest",
     "lint": "eslint src",
     "format": "eslint src --fix"

@@ -1,5 +1,8 @@
 import request from 'supertest';
-import server from '../server';
+import http from 'http';
+import { handleRequests } from '../routes/routes';
+
+const server = http.createServer(handleRequests);
 
 const endpoint = '/api/users';
 const userData = {
