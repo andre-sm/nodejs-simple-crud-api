@@ -60,7 +60,7 @@ describe('Correct error handling tests', () => {
 
   test('PUT request should return 404 status code if user doesn\'t exist', async () => {
     const response = await request(server)
-      .put(`${endpoint}/${userId.slice(0, -1)}3`)
+      .put(`${endpoint}/${userId.slice(0, -3)}1c3`)
       .send(userData)
       .set('Content-Type', 'application/json');
     expect(response.statusCode).toBe(404);
@@ -69,7 +69,7 @@ describe('Correct error handling tests', () => {
 
   test('DELETE request should return 404 status code if user doesn\'t exist', async () => {
     const response = await request(server)
-      .delete(`${endpoint}/${userId.slice(0, -1)}3`)
+      .delete(`${endpoint}/${userId.slice(0, -3)}9c7`)
       .send(userData);
     expect(response.statusCode).toBe(404);
     expect(response.body).toBe('Error: User doesn\'t exist');
