@@ -59,6 +59,6 @@ describe('CRUD operations API tests', () => {
   test('GET request should return 404 status code if user doesn\'t exist', async () => {
     const response = await request(server).get(`${endpoint}/${userId}`);
     expect(response.statusCode).toBe(404);
-    expect(response.body).toBe('User doesn\'t exist');
+    expect(response.body).toBe('Error: User doesn\'t exist');
   });
 });

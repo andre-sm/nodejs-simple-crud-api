@@ -17,7 +17,7 @@ const getAllUsers = (req: IncomingMessage, res: ServerResponse): void => {
     res.end(JSON.stringify(users));
   } catch (error) {
     res.writeHead(500, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify('Internal server error'));
+    res.end(JSON.stringify('Error: Internal server error'));
   }
 };
 
@@ -27,7 +27,7 @@ const getUser = (req: IncomingMessage, res: ServerResponse, userId: string): voi
 
     if (!isValidId) {
       res.writeHead(400, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify('User Id is invalid'));
+      res.end(JSON.stringify('Error: User id is invalid'));
     } else {
       const user = store.getUser(userId);
       if (user) {
@@ -39,12 +39,12 @@ const getUser = (req: IncomingMessage, res: ServerResponse, userId: string): voi
         res.end(JSON.stringify(user));
       } else {
         res.writeHead(404, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify('User doesn\'t exist'));
+        res.end(JSON.stringify('Error: User doesn\'t exist'));
       }
     }
   } catch (error) {
     res.writeHead(500, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify('Internal server error'));
+    res.end(JSON.stringify('Error: Internal server error'));
   }
 };
 
@@ -75,7 +75,7 @@ const addUser = async (req: IncomingMessage, res: ServerResponse): Promise<void>
     }
   } catch (error) {
     res.writeHead(500, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify('Internal server error'));
+    res.end(JSON.stringify('Error: Internal server error'));
   }
 };
 
@@ -85,7 +85,7 @@ const editUser = async (req: IncomingMessage, res: ServerResponse, id: string): 
 
     if (!isValidId) {
       res.writeHead(400, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify('User Id is invalid'));
+      res.end(JSON.stringify('Error: User id is invalid'));
     } else {
       const parsedBody = await utils.readRequestBody(req);
       const { username, age, hobbies } = parsedBody;
@@ -110,13 +110,13 @@ const editUser = async (req: IncomingMessage, res: ServerResponse, id: string): 
           res.end(JSON.stringify(updatedUser));
         } else {
           res.writeHead(404, { 'Content-Type': 'application/json' });
-          res.end(JSON.stringify('User doesn\'t exist'));
+          res.end(JSON.stringify('Error: User doesn\'t exist'));
         }
       }
     }
   } catch (error) {
     res.writeHead(500, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify('Internal server error'));
+    res.end(JSON.stringify('Error: Internal server error'));
   }
 };
 
@@ -126,7 +126,7 @@ const deleteUser = (req: IncomingMessage, res: ServerResponse, userId: string): 
 
     if (!isValidId) {
       res.writeHead(400, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify('User Id is invalid'));
+      res.end(JSON.stringify('Error: User id is invalid'));
     } else {
       const isdeleted = store.deleteUser(userId);
 
@@ -139,12 +139,12 @@ const deleteUser = (req: IncomingMessage, res: ServerResponse, userId: string): 
         res.end();
       } else {
         res.writeHead(404, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify('User doesn\'t exist'));
+        res.end(JSON.stringify('Error: User doesn\'t exist'));
       }
     }
   } catch (error) {
     res.writeHead(500, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify('Internal server error'));
+    res.end(JSON.stringify('Error: Internal server error'));
   }
 };
 

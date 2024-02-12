@@ -24,11 +24,11 @@ const handleRequests = (req: IncomingMessage, res: ServerResponse): void => {
       deleteUser(req, res, userId);
     } else {
       res.writeHead(404, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify('Endpoint doesn\'t exist'));
+      res.end(JSON.stringify('Error: Endpoint doesn\'t exist'));
     }
   } catch (error) {
     res.writeHead(500, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify('Internal server error'));
+    res.end(JSON.stringify('Error: Internal server error'));
   }
 };
 
