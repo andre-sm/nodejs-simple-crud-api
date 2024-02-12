@@ -31,6 +31,10 @@ const getUser = (req: IncomingMessage, res: ServerResponse, userId: string): voi
     } else {
       const user = store.getUser(userId);
       if (user) {
+        if (cluster.isWorker && process.send) {
+          process.send({ type: 'state', data: store.getAllUsers() });
+        }
+
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify(user));
       } else {

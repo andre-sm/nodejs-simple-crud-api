@@ -80,7 +80,9 @@ const createMultiServer = (port: string | number) => {
       });
     }
   } catch (error) {
-    console.error();
+    if (error instanceof Error) {
+      console.error(error.message);
+    }
   }
 };
 
