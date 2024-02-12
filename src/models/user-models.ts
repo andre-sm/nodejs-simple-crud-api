@@ -1,0 +1,17 @@
+export interface UserReqBody {
+  username: string;
+  age: number;
+  hobbies: string[];
+}
+
+export interface User {
+  id: string;
+  username: string;
+  age: number;
+  hobbies: string[];
+}
+
+export interface ClusterMessage {
+  type: string;
+  data: User[];
+}
