@@ -1,4 +1,5 @@
 import { IncomingMessage, ServerResponse } from 'http';
+import cluster from 'cluster';
 import { v4 as uuidv4, validate as uuidValidate } from 'uuid';
 import { User } from '../models/user-models';
 import * as store from '../services/store';
@@ -7,6 +8,10 @@ import * as utils from '../utils/index';
 const getAllUsers = (req: IncomingMessage, res: ServerResponse): void => {
   try {
     const users = store.getAllUsers();
+
+    if (cluster.isWorker && process.send) {
+      process.send({ type: 'state', data: users });
+    }
 
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify(users));
@@ -57,6 +62,10 @@ const addUser = async (req: IncomingMessage, res: ServerResponse): Promise<void>
 
       store.addUser(userData);
 
+      if (cluster.isWorker && process.send) {
+        process.send({ type: 'state', data: store.getAllUsers() });
+      }
+
       res.writeHead(201, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify(userData));
     }
@@ -89,6 +98,10 @@ const editUser = async (req: IncomingMessage, res: ServerResponse, id: string): 
         const updatedUser = store.updateUser(userData);
 
         if (updatedUser) {
+          if (cluster.isWorker && process.send) {
+            process.send({ type: 'state', data: store.getAllUsers() });
+          }
+
           res.writeHead(200, { 'Content-Type': 'application/json' });
           res.end(JSON.stringify(updatedUser));
         } else {
@@ -114,6 +127,10 @@ const deleteUser = (req: IncomingMessage, res: ServerResponse, userId: string): 
       const isdeleted = store.deleteUser(userId);
 
       if (isdeleted) {
+        if (cluster.isWorker && process.send) {
+          process.send({ type: 'state', data: store.getAllUsers() });
+        }
+
         res.writeHead(204, { 'Content-Type': 'application/json' });
         res.end();
       } else {

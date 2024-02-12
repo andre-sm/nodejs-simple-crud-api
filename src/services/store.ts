@@ -1,6 +1,6 @@
 import { User } from '../models/user-models';
 
-const users: User[] = [];
+let users: User[] = [];
 
 export const addUser = (user: User): void => {
   try {
@@ -51,5 +51,13 @@ export const deleteUser = (userId: string): boolean | null => {
     return null;
   } catch (error) {
     throw new Error('Error while deleting user');
+  }
+};
+
+export const updateStore = (newUsers: User[]): void => {
+  try {
+    users = newUsers;
+  } catch (error) {
+    throw new Error('Error while adding new user');
   }
 };

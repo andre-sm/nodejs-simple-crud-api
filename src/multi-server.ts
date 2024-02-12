@@ -2,6 +2,8 @@ import http, { IncomingMessage, ServerResponse } from 'http';
 import cluster from 'cluster';
 import os from 'os';
 import { handleRequests } from './routes/routes';
+import { User, ClusterMessage } from './models/user-models';
+import { updateStore } from './services/store';
 
 const createMultiServer = (port: string | number) => {
   try {
@@ -9,13 +11,22 @@ const createMultiServer = (port: string | number) => {
 
     if (cluster.isPrimary) {
       console.log(`Primary ${process.pid} is running`);
+      let store: User[] = [];
       const workerIDs: number[] = [];
       let lastWorkerIndex = 0;
 
-      for (let i = 1; i < numberOfCPU; i += 1) {
+      const numberOfCPUArr = Array(numberOfCPU - 1).fill(1);
+
+      numberOfCPUArr.forEach(() => {
         const worker = cluster.fork();
         workerIDs.push(worker.id);
-      }
+
+        worker.on('message', (msg) => {
+          if (msg.type === 'state') {
+            store = msg.data;
+          }
+        });
+      });
 
       cluster.on('exit', (worker) => {
         console.log(`worker ${worker.process.pid} died`);
@@ -41,6 +52,9 @@ const createMultiServer = (port: string | number) => {
 
         originalReq.pipe(proxyRequest, { end: true });
 
+        const worker = cluster.workers && cluster.workers[workerIDs[lastWorkerIndex]];
+        worker?.send({ type: 'update', data: store });
+
         lastWorkerIndex = (lastWorkerIndex === workerIDs.length - 1) ? 0 : lastWorkerIndex + 1;
       });
 
@@ -50,14 +64,19 @@ const createMultiServer = (port: string | number) => {
     } else {
       console.log(`Worker ${process.pid} started`);
 
+      process.on('message', (msg: ClusterMessage) => {
+        updateStore(msg.data);
+      });
+
       const server = http.createServer();
       server.on('request', (req, res) => {
         handleRequests(req, res);
       });
 
       const workerId = cluster.worker?.id as number;
-      server.listen(+port + workerId, () => {
-        console.log(`Worker server listening on port ${+port + workerId}`);
+      const workerPort = +port + workerId;
+      server.listen(workerPort, () => {
+        console.log(`Worker server listening on port ${workerPort}`);
       });
     }
   } catch (error) {

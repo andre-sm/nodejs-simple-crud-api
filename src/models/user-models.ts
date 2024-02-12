@@ -10,3 +10,8 @@ export interface User {
   age: number;
   hobbies: string[];
 }
+
+export interface ClusterMessage {
+  type: string;
+  data: User[];
+}
