@@ -5,7 +5,7 @@
         "airbnb-base",
         "airbnb-typescript/base",
         "plugin:@typescript-eslint/eslint-recommended",
-        "plugin:@typescript-eslint/recommended",
+        "plugin:@typescript-eslint/recommended"
       ],
     "parserOptions": { 
         "project": "**/tsconfig.json",
@@ -15,6 +15,7 @@
     "rules": {
         "@typescript-eslint/no-explicit-any": "error",
         "import/prefer-default-export": "off",
-        "no-console": "off"
+        "no-console": "off",
+        "operator-linebreak": ["error", "before"]
     }
 }
